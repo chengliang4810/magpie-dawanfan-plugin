@@ -1,0 +1,6 @@
+.ego/
+node_modules/
+*.zip
+*.tgz
+dist/
+test-results/
