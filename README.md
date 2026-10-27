@@ -4,14 +4,14 @@
 
 ## 安装
 
-在 magpie 的「插件 → 添加插件」中填写 `github:chengliang4810/dawanfan`，或运行：
+在 magpie 的「插件 → 添加插件」中填写 `github:chengliang4810/magpie-dawanfan-plugin`，或运行：
 
 ```sh
-magpie plugin add github:chengliang4810/dawanfan
+magpie plugin add github:chengliang4810/magpie-dawanfan-plugin
 magpie plugin login dawanfan
 ```
 
-也可从 [Releases](https://github.com/chengliang4810/dawanfan/releases) 下载插件包，解压后添加 `dawanfan` 文件夹的完整路径。
+也可从 [Releases](https://github.com/chengliang4810/magpie-dawanfan-plugin/releases) 下载插件包，解压后添加 `dawanfan` 文件夹的完整路径。
 
 ## 登录
 
