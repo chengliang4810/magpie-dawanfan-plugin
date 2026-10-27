@@ -14,7 +14,9 @@ npm run test:browser
 npm pack
 ```
 
-`test:browser` 会短暂打开本机真实浏览器，使用被拦截的虚构页面验证会话检测和窗口关闭，不操作真实账号。分发包包含 `playwright-core`，无需下载额外的 Chromium；源码环境需先安装 npm 依赖。
+`test:browser` 会短暂打开本机真实浏览器，使用被拦截的虚构页面验证会话检测和窗口关闭，不操作真实账号。GitHub 源码通过普通 dependencies 安装 `playwright-core`；不能将未提交的 node_modules 声明为 bundledDependencies，否则 Bun 的 GitHub 安装会跳过该依赖。ZIP 分发包在单独的打包阶段内嵌该组件，无需下载额外的 Chromium。
+
+运行 `node scripts/prepare-release.mjs` 可生成 `.release-stage/<版本>/`，仅该分发暂存目录声明内嵌浏览器组件。对暂存目录运行 `npm pack --ignore-scripts`，再解压并制作 ZIP；不要把其依赖声明复制回源码清单。
 
 将源码文件夹添加到 magpie 后，关闭再开启插件即可加载修改。请使用独立配置目录，做法见 [magpie 官方测试说明](https://usemagpie.ai/docs/zh/plugins#test)。
 
@@ -31,6 +33,8 @@ magpie quota
 网页登录采用独立的临时浏览器环境，仅检测官网来源下的 `localStorage.zt_token`；正常关闭后由浏览器控制组件清理临时资料。关闭窗口即取消，未完成的登录十分钟后超时。
 
 登录后查找名为 `magpie` 的有效 Key，存在时通过 `/reveal` 读取，不存在时创建。同名但已吊销的 Key 不复用。创建请求不自动重试；响应丢失时，下一次登录重新查询列表，以免盲目重复创建。
+
+已登录后动态提供「更换 API Key」操作，使用宿主的账号选择及密码输入控件。仅仅读取当前配置目录中 dawanfan 的账号记录；通过官网会话验证账号和新 Key 的归属，再检查模型接口，成功结果交给宿主保存并按原账号身份合并。操作本身不直接改写认证文件。`metadata.apiKeySource: "custom"` 标记用户选择的 Key，网页登录续期保留该值。
 
 ## 凭据与协议
 

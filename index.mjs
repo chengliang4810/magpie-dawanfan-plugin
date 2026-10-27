@@ -3,6 +3,8 @@ import {
   BASE_URL, PROVIDER, credentials, loadModels, loadUsage, forwardRequest,
 } from './lib/dawan.mjs';
 import { authorizeBrowserLogin } from './lib/browser-login.mjs';
+import { completeBrowserLogin, savedAccounts } from './lib/login.mjs';
+import { changeKeyMethod } from './lib/change-key.mjs';
 
 const icon = `data:image/svg+xml;base64,${readFileSync(new URL('./assets/logo.svg', import.meta.url)).toString('base64')}`;
 
@@ -26,13 +28,18 @@ export const DawanFanPlugin = async (_input, options = {}) => ({
   auth: {
     provider: PROVIDER,
     icon,
-    methods: [
-      {
+    get methods() {
+      const methods = [{
         type: 'oauth',
         label: '网页登录',
-        authorize: () => authorizeBrowserLogin({ browserChannel: options.browserChannel }),
-      },
-    ],
+        authorize: () => authorizeBrowserLogin({
+          browserChannel: options.browserChannel,
+          complete: (token, settings) => completeBrowserLogin(token, { ...settings, directory: _input?.directory }),
+        }),
+      }];
+      if (savedAccounts(_input?.directory).length) methods.push(changeKeyMethod(_input.directory));
+      return methods;
+    },
     async loader(getAuth) {
       const auth = credentials(await getAuth());
       if (!auth) return {};

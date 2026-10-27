@@ -34,7 +34,7 @@
   },
   "scripts": {
     "test": "node --test",
-    "check": "node --check index.mjs && node --check lib/dawan.mjs && node --check lib/login.mjs && node --check lib/browser-login.mjs && node scripts/check-package.mjs",
+    "check": "node --check index.mjs && node --check lib/dawan.mjs && node --check lib/login.mjs && node --check lib/browser-login.mjs && node --check lib/change-key.mjs && node scripts/check-package.mjs",
     "sync-icon": "node scripts/sync-icon.mjs",
     "prepack": "npm run check",
     "test:browser": "node scripts/smoke-browser.mjs"
