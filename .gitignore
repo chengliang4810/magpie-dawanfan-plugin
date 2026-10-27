@@ -1,4 +1,5 @@
 .ego/
+.release-stage/
 node_modules/
 *.zip
 *.tgz

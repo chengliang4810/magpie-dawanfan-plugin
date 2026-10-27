@@ -1,6 +1,6 @@
 {
   "name": "dawanfan",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "在 magpie 中使用大碗饭模型，网页登录即可连接，并查看套餐用量。",
   "type": "module",
   "license": "MIT",
@@ -44,8 +44,5 @@
   },
   "dependencies": {
     "playwright-core": "1.64.1"
-  },
-  "bundledDependencies": [
-    "playwright-core"
-  ]
+  }
 }

@@ -25,7 +25,7 @@ function fakeBrowser(tokens = ['']) {
   return { browser, page, state: () => ({ closed, contexts, reads, navigated }) };
 }
 
-test('browser sign-in is the only login method and asks for no key or session', async () => {
+test('before first login only browser sign-in is offered and asks for no key or session', async () => {
   const hooks = await DawanFanPlugin({});
   assert.equal(hooks.auth.methods.length, 1);
   const method = hooks.auth.methods[0];
@@ -108,6 +108,15 @@ test('browser startup and API errors produce safe login failures', async () => {
     launch: async () => fake.browser,
     complete: async () => { throw new Error('unexpected error containing a secret'); },
   });
-  assert.equal((await failed.callback()).error, '网页登录失败，请重试。');
+  assert.equal((await failed.callback()).error, '读取大碗饭账号或 API Key 失败，请重试。');
+  assert.equal(fake.state().closed, true);
+});
+
+test('website navigation failures identify the failing step without leaking details', async () => {
+  const fake = fakeBrowser();
+  fake.page.goto = async () => { throw new Error('network trace with secret'); };
+  const flow = await authorizeBrowserLogin({ launch: async () => fake.browser });
+  const result = await flow.callback();
+  assert.equal(result.error, '无法打开大碗饭登录页，请检查网络后重试。');
   assert.equal(fake.state().closed, true);
 });
